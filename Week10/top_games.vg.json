@@ -1,0 +1,102 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Top 5 Most Popular Esports Games",
+  "width": 600,
+  "height": 400,
+  "data": {"url": "games.csv"},
+  "params": [
+    {
+      "name": "metric",
+      "value": "prize",
+      "bind": {
+        "input": "select",
+        "options": ["prize", "players", "tournaments"],
+        "labels": ["Total Prize (USD)", "Number of Tournament Players", "Number of Tournaments"],
+        "name": "Metric Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {"calculate": "datum[metric]", "as": "metric_value"},
+		{
+			"calculate": "datum.game + ': ' + (metric == 'prize' ? '$' + datum.prize : metric == 'players' ? datum.players : datum.tournaments)",
+			"as": "selected_tooltip"
+		}
+  ],
+  "encoding": {
+    "y": {"field": "game", "type": "nominal", "sort": "-x", "title": "Games"},
+    "x": {
+      "field": "metric_value",
+      "type": "quantitative",
+      "title": {
+        "signal": "metric == 'prize' ? 'Total Prize (USD)' : metric == 'players' ? 'Number of Tournament Players' : 'Number of Tournaments'"
+      },
+			"axis": {"grid": false}
+    },
+    "color": {"field": "game", "type": "nominal", "legend": null},
+    "tooltip": [
+			{"field": "game", "type": "nominal", "title": "Game"},
+			{"field": "metric_value", "type": "quantitative", "format": ",.0f", "title": "Value"}
+		]
+  },
+  "layer": [
+    {"mark": "bar"},
+    {
+      "transform": [
+        {"filter": "datum.game == 'Dota 2' && metric == 'prize'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": -100,
+				"dy": 50,
+        "fontWeight": "bold",
+        "color": "red"
+      },
+      "encoding": {
+        "x": {"field": "metric_value"},
+        "y": {"field": "game"},
+        "text": {"value": "Highest prize pool"}
+      }
+    },
+		{
+      "transform": [
+        {"filter": "datum.game == 'Counter-Strike: Global Offensive' && metric == 'players'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": -100,
+				"dy": 50,
+        "fontWeight": "bold",
+        "color": "red"
+      },
+      "encoding": {
+        "x": {"field": "metric_value"},
+        "y": {"field": "game"},
+        "text": {"value": "Highest player count"}
+      }
+    },
+		{
+      "transform": [
+        {"filter": "datum.game == 'Counter-Strike: Global Offensive' && metric == 'tournaments'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": -100,
+				"dy": 50,
+        "fontWeight": "bold",
+        "color": "red"
+      },
+      "encoding": {
+        "x": {"field": "metric_value"},
+        "y": {"field": "game"},
+        "text": {"value": "Highest tournament count"}
+      }
+    }
+  ]
+}
