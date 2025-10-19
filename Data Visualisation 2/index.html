@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisation 2</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+    <script src="vega_lite_vis.js"></script>
+</head>
+<body>
+    <div class="page-container">
+        <div class="central-strip header">
+            <h1>Esports Competitions: The Rise of Competitive Gaming</h1>
+
+            <p>
+                Over the past decade, esports has transformed from niche tournaments into one of the most profitable and widely viewed forms of competition.
+                Behind every match lies numerous players, teams, and games competing for millions in prizes and an ever-growing fanbase.
+                This visualisation takes you through how esports has achieved it's global reach and the teams and titles that define the scene.
+            </p>
+        </div>
+
+        <div class="central-strip">
+
+            <div class="chart-container">
+                <h2>A Global Stage for Competition</h2>
+                <p>
+                    Esports is no longer limited to a few gaming hubs. It has grown to become a worldwide arena. 
+                    The map below reveals how prize money flows across regions, showing where competition is fiercest.
+                    Countries like China, the United States, and Western Europe dominate the scene, reflecting the infrastructure and investment in professional gaming.
+                </p>
+                <div id="map"></div>
+            </div>
+
+            <div class="chart-container">
+                <h2>The Games Driving the Industry</h2>
+                <p>
+                    But which games are responsible for this surge? 
+                    The bar chart below compares top esports titles by total prize pool.
+                    Each game represents not just competition, but a culture of its own.
+                    The size of the prizes and tournaments emphasises this, indicating 
+                    the influence each game has on its fanbase.
+                </p>
+                <div id="bar"></div>
+            </div>
+
+            <div class="team-selector">
+                <label>Select Team:</label>
+                <div class="team-buttons">
+                    <button class="team-btn active" data-team="Team Liquid">Team Liquid</button>
+                    <button class="team-btn" data-team="OG">OG</button>
+                    <button class="team-btn" data-team="Team Spirit">Team Spirit</button>
+                </div>
+                <p>
+                    Switch between these top 3 teams to see their impact
+                </p>
+            </div>
+            <div class="chart-container team-charts-side-by-side">
+                <div class="team-chart">
+                    <h2>How Players Shape Success</h2>
+                    <p>
+                        Esports success is rarely individual. It's a balance of star players and strong coordination.
+                        This chart shows how each player contributes to their team's total earnings.
+                        Hover to discover who leads each roster.
+                    </p>
+                    <div id="players"></div>
+                </div>
+
+                <div class="team-chart">
+                    <h2>How Teams Diversify Across Games</h2>
+                    <p>
+                        Most professional organisations don't focus on just one title.
+                        Here, we see how each team spreads its performance across multiple games from MOBAs like <em>Dota 2</em> to shooters like <em>CS:GO</em>.
+                    </p>
+                    <div id="games"></div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2>The Heart of Esports Growth</h2>
+                <p>
+                    Behind every competition is an audience that makes it matter.
+                    The treemap below illustrates how viewership has evolved across major titles and years.
+                    As the chart shows, audience engagement follows the same pattern as prize money,     where they are 
+                    concentrated in a few leading titles, but with new games emerging to challenge the giants.
+                </p>
+                <div id="treemap"></div>
+            </div>
+
+        </div>
+        <div class="central-strip header" style="margin-top: 30px;">
+            <p>
+                As these visualisations demonstrate, esports has become a monolith in gaming culture where global reach, diverse gaming titles, 
+                strategic team building, and passionate viewership merge to create one of the fastest growing entertainment industries of our time.
+            </p>
+        </div>
+
+        <footer style="margin-top: 30px; text-align: center; color: #555; font-size: 0.9em;">
+            <p><strong>Author:</strong> Abdus Sami</p>
+            <p><strong>Date:</strong> 19 October 2025</p>
+            <p><strong>Data Sources:</strong> esport earnings, escharts</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 400,
+  "title": {"text": "Team Earnings Distribution by Game", "offset": 10},
+  "data": {"url": "data/team_games.csv"},
+  "params": [{"name": "teams", "value": "Team Liquid"}],
+  "transform": [
+    {"filter": "datum.team == teams"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "point", "size": 100, "tooltip": true},
+      "encoding": {
+        "x": {
+          "field": "game",
+          "type": "nominal",
+          "title": "Game",
+          "axis": {"labelAngle": 45, "labelFontSize": 12},
+          "sort": {"field": "percentage", "order": "descending"}
+        },
+        "y": {
+          "field": "total_team", 
+          "type": "quantitative",
+          "title": "Team Earnings (USD)",
+          "axis": {"format": "~s", "labelFontSize": 12}
+        },
+        "color": {
+          "field": "percentage",
+          "type": "quantitative",
+          "title": "% of prize pool",
+          "scale": {"scheme":"blues", "domain":[0,10]},
+          "legend": {"orient": "right"}
+        },
+        "tooltip": [
+          {"field": "game", "title": "Game"},
+          {"field": "total_team", "title": "Team Earnings", "format": "$,.0f"},
+          {"field": "percentage", "title": "% of Prize Pool", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.game == 'Dota 2'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dx": 0,
+        "dy": -10,
+        "fontWeight": "bold",
+        "fontSize": 11,
+        "color": "black"
+      },
+      "encoding": {
+        "x": {"field": "game", "type": "nominal"},
+        "y": {"field": "total_team", "type": "quantitative"},
+        "text": {"value": "Most profitable game in Esports"}
+      }
+    }
+  ]
+}

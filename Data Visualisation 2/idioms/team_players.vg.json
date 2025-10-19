@@ -1,0 +1,90 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 400,
+  "title": "Player Earnings",
+  "data": {
+    "url": "data/team_players.csv",
+    "format": {"type": "csv", "parse": {"total_team": "number"}}
+  },
+  "params": [
+    {"name": "teams", "value": "Team Liquid"}
+  ],
+  "transform": [
+    {"filter": "datum.team == teams"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "rule", "size": 2},
+      "encoding": {
+        "y": {
+          "field": "player_name",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Players",
+          "axis": {"labelFontSize": 12}
+        },
+        "x": {
+          "field": "total_team",
+          "type": "quantitative",
+          "title": "Team Earnings (USD)",
+          "axis": {"format": "$.3s", "labelFontSize": 12},
+          "scale": {"domain": [0, 7000000]}
+        },
+        "color": {
+          "field": "country",
+          "type": "nominal",
+          "title": "Country",
+          "scale": {"scheme":"darkmulti"},
+          "legend": {"orient": "right"}
+        }
+      }
+    },
+    {
+      "mark": {"type": "point", "filled": true, "size": 120},
+      "encoding": {
+        "y": {"field": "player_name", "type": "nominal", "sort": "-x"},
+        "x": {"field": "total_team", "type": "quantitative"},
+        "color": {
+          "field": "country",
+          "type": "nominal",
+          "title": "Country",
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "player_name", "title": "Player"},
+          {"field": "country", "title": "Country"},
+          {
+            "field": "total_team",
+            "title": "Team Earnings",
+            "format": "$,.0f"
+          },
+          {
+            "field": "percentage",
+            "title": "% Share of Team Earnings"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {"filter": "datum.player_name == 'Johan Sundstein'"}
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": -150,
+        "dy": -20,
+        "fontWeight": "bold",
+        "fontSize": 12,
+        "color": "black"
+      },
+      "encoding": {
+        "y": {"field": "player_name", "type": "nominal"},
+        "x": {"field": "total_team", "type": "quantitative"},
+        "text": {"value": "Highest earning player of all time"}
+      }
+    }
+  ]
+}

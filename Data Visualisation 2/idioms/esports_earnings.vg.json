@@ -1,0 +1,66 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Esports Winnings by Country",
+  "width": "container",
+  "height": 450,
+  "background": "#ffffff",
+  "projection": {"type": "equirectangular"},
+  "layer": [
+    {
+      "data": {"values": [{"type": "Sphere"}]},
+      "mark": {"type": "geoshape", "fill": "#dbeff5"}
+    },
+    {
+      "data": {
+        "url": "data/countries2.json",
+        "format": {"type": "topojson", "feature": "ne_110m_graticules_20"}
+      },
+      "mark": {"type": "geoshape", "stroke": "#cdd5db", "strokeWidth": 0.5, "fill": null}
+    },
+    {
+      "data": {
+        "url": "data/countries2.json",
+        "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+      },
+      "transform": [
+        {
+          "lookup": "properties.NAME",
+          "from": {
+            "data": {"url": "data/country_earnings.csv"},
+            "key": "country",
+            "fields": ["total_prize_usd"]
+          }
+        },
+        {
+          "calculate": "isValid(datum.total_prize_usd) ? datum.total_prize_usd : 0",
+          "as": "earnings"
+        }
+      ],
+      "mark": {"type": "geoshape", "stroke": "#999", "strokeWidth": 0.5},
+      "encoding": {
+        "color": {
+          "field": "earnings",
+          "type": "quantitative",
+          "title": "Total Prize (USD)",
+          "scale": {
+            "scheme": "blues",
+            "domain": [1000000, 400000000]
+          }
+        },
+        "tooltip": [
+          {"field": "properties.NAME", "title": "Country"},
+          {
+            "field": "earnings",
+            "type": "quantitative",
+            "title": "Total Prize USD",
+            "format": "$,.0f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "legend": {"orient": "bottom"},
+    "style": {"geoshape": {"stroke": "#ccc"}}
+  }
+}

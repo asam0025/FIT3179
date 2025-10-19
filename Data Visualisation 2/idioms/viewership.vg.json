@@ -1,0 +1,134 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 700,
+  "height": 500,
+  "padding": 5,
+  "title": "Esports Viewership Treemap by Year and Game",
+  
+  "signals": [
+    {
+      "name": "selectedYear",
+      "value": 2020,
+      "bind": {
+        "input": "select",
+        "options": [2020, 2021, 2022, 2023, 2024],
+        "name": "Select Year: "
+      }
+    },
+    {
+      "name": "width", "update": "containerSize()[0] * 0.9"
+    },
+    {
+      "name": "height", "update": "400"
+    }
+  ],
+
+  "data": [
+    {
+      "name": "source",
+      "url": "data/viewership.csv",
+      "format": {"type": "csv", "parse": {"viewers": "number"}}
+    },
+    {
+      "name": "filteredData",
+      "source": "source",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.year == selectedYear"
+        }
+      ]
+    },
+    {
+      "name": "tree",
+      "source": "filteredData",
+      "transform": [
+        {
+          "type": "nest",
+          "keys": ["game"]
+        },
+        {
+          "type": "treemap",
+          "field": "viewers",
+          "round": true,
+          "method": "squarify",
+          "size": [{"signal": "width"}, {"signal": "height"}],
+          "paddingInner": 1,
+          "as": ["x0", "y0", "x1", "y1"]
+        }
+      ]
+    },
+    {
+      "name": "nodes",
+      "source": "tree",
+      "transform": [{"type": "filter", "expr": "datum.children == null"}]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "source", "field": "game"},
+      "range": {"scheme":"yellowgreenblue"}
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "nodes"},
+      "encode": {
+        "enter": {
+          "x": {"field": "x0"},
+          "y": {"field": "y0"},
+          "x2": {"field": "x1"},
+          "y2": {"field": "y1"},
+          "fill": {"scale": "color", "field": "game"},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 2}
+        },
+        "update": {
+          "tooltip": {
+            "signal": "{'Year': selectedYear, 'Game': datum.game, 'Peak Viewers': format(datum.viewers, ',')}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "nodes"},
+      "encode": {
+        "enter": {
+          "x": {"signal": "(datum.x0 + datum.x1)/2"},
+          "y": {"signal": "(datum.y0 + datum.y1)/2"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "fontSize": {"value": 15},
+          "fontWeight": {"value": "bold"},
+          "fill": {"value": "white"},
+          "text": {"field": "game"}
+        },
+        "update": {
+          "text": [
+            {"test": "datum.x1 - datum.x0 > 100", "signal": "datum.game"},
+            {"value": ""}
+          ]
+        }
+      }
+    }
+  ],
+
+  "legends": [
+    {
+      "fill": "color",
+      "title": "Game",
+      "orient": "right",
+      "columns": 1,
+      "labelLimit": 100,
+      "labelFontSize": 11,
+      "symbolSize": 100,
+      "rowPadding": 8
+    }
+  ]
+}
